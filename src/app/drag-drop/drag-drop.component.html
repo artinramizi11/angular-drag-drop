@@ -1,0 +1,99 @@
+<div class="kanban-app">
+  <div class="notes-sidebar">
+    <div style="display: flex;gap: 10px;
+    justify-content: space-between;align-items: center;margin-bottom: 20px;">
+      <h2 class="sidebar-title">All Notes</h2>
+    <button (click)="onAddingNewNote()">Add Note</button>
+    </div>
+    <div class="notes-list">
+      @for (note of allNotes; track note) {
+        <div class="note-card" draggable="true" (dragstart)="onDragStart($event, note.id)">
+          <h3 class="note-title">{{note.title}}</h3>
+          <p class="note-content">{{note.content}}</p>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="kanban-board">
+   <div class="kanban-column"
+    (drop)="onDrop($event, 'optionalNotes')"
+   
+    
+    >
+  <div class="column-header" >
+    <h2 class="title2">Optional</h2>
+    <span class="note-count">{{allSavedNotes.optionalNotes.length}} notes</span>
+  </div>
+  <div class="notes-container"
+  [ngClass]="{'bgGreen': onDragEnterTarget() === 'optionalNotes'}"
+   (dragenter)="onDragEnter('optionalNotes')" 
+     (dragover)="onDragOver($event)"
+   
+  
+  >
+    @for (note of allSavedNotes.optionalNotes; track note) {
+      <div class="kanban-note" draggable="true" (dragstart)="onDragStart($event, note.id)">
+        <h3 class="note-title">{{ note.title }}</h3>
+        <p class="note-content">{{ note.content }}</p>
+        <button (click)="onRemoveNote(note,'optionalNotes')">Remove Note</button>
+      </div>
+    }
+  </div>
+</div>
+
+
+    <div class="kanban-column"
+   
+    (dragenter)="onDragEnter('todoNotes')" 
+         (dragover)="onDragOver($event)"
+         (drop)="onDrop($event,'todoNotes')">
+      <div class="column-header">
+        <h2>To Do</h2>
+        <span class="note-count">{{allSavedNotes.todoNotes.length}} notes</span>
+      </div>
+      <div class="notes-container" 
+        [ngClass]="{'bgGreen': onDragEnterTarget() === 'todoNotes'}"
+   (dragenter)="onDragEnter('todoNotes')" 
+     (dragover)="onDragOver($event)"
+      >
+        @for (note of allSavedNotes.todoNotes; track note) {
+          <div class="kanban-note" draggable="true" (dragstart)="onDragStart($event, note.id)">
+            <h3 class="note-title">{{ note.title }}</h3>
+            <p class="note-content">{{ note.content }}</p>
+            <button (click)="onRemoveNote(note,'todoNotes')">Remove Note</button>
+          </div>
+        }
+      </div>
+    </div>
+    
+
+    <div class="kanban-column"
+    (dragenter)="onDragEnter('doneNotes')" 
+         (dragover)="onDragOver($event)"
+         (drop)="onDrop($event,'doneNotes')">
+      <div class="column-header">
+        <h2>Done</h2>
+        <span class="note-count">{{allSavedNotes.doneNotes.length}} notes</span>
+      </div>
+      <div class="notes-container"
+       [ngClass]="{'bgGreen': onDragEnterTarget() === 'doneNotes'}"
+   (dragenter)="onDragEnter('doneNotes')" 
+     (dragover)="onDragOver($event)"
+      >
+        @for (note of allSavedNotes.doneNotes; track note) {
+          <div class="kanban-note">
+            <h3 class="note-title">{{ note.title }}</h3>
+            <p class="note-content">{{ note.content }}</p>
+            <button (click)="onRemoveNote(note,'doneNotes')">Remove Note</button>
+          </div>  
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (addingNewNote()){
+  <app-add-note (closeModal)="addingNewNote.set(false)" (addNote)="onAddNote($event)"></app-add-note>
+}
+
